@@ -1,0 +1,68 @@
+@import "variables";
+
+.app {
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 20px;
+  background: @jet;
+  color: @cultured;
+  height: 100vh;
+}
+
+.form {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.input{
+  padding: 10px 15px;
+  border-radius: 10px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  outline: none;
+  border: none;
+  color: @space-cadet;
+  width: 100%;
+}
+
+.checkBox {
+  background: @blue-yonder;
+  border: 1px solid @dark-cornflower-blue;
+  outline: none;
+  width: 20px;
+  height: 20px;
+
+  &:checked {
+    background: @blue-yonder;
+    border: 1px solid @dark-cornflower-blue;
+  }
+}
+
+.addButton {
+  background: @dark-cornflower-blue;
+  border: 1px solid @space-cadet;
+  color: @cultured;
+  padding: 10px 15px;
+  border-radius: 15px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  width: 130px;
+  transition: 1s ease;
+  cursor: pointer;
+
+  &:hover{
+    background: @space-cadet;
+  }
+}
+
+
