@@ -1,27 +1,58 @@
-@import "src/variables";
-
 .todo {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
-  max-width: 500px;
-  width: 100%;
-  padding: 10px;
+  gap: 20px;
+  padding: 10px 15px;
   border-radius: 10px;
-}
-
-.top{
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 10px;
-  max-width: 360px;
   width: 100%;
+  max-width: 800px;
+  min-height: 60px;
 }
 
 .chooseTodo {
-  background: @blue-yonder;
+  background: #576CA8;
+}
+
+input[type="checkbox"] {
+  appearance: none;
+  font: inherit;
+  color: currentColor;
+  width: 25px;
+  height: 25px;
+  border: 3px solid #274690;
+  border-radius: 4px;
+  display: grid;
+  place-content: center;
+}
+
+input[type="checkbox"]::before {
+  content: "";
+  width: 15px;
+  height: 15px;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  background-color: #1B264F;
+}
+
+input[type="checkbox"]:checked::before {
+  transform: scale(1);
+}
+
+input[type="checkbox"]:disabled {
+  --form-control-color: var(--form-control-disabled);
+  color: var(--form-control-disabled);
+  cursor: not-allowed;
+}
+
+.todoTextBlock{
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.text {
+  font-family: 'Bahnschrift', sans-serif;
+  color: white;
 }

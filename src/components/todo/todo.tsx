@@ -9,11 +9,14 @@ type Props = {
 export const Todo = ({ todo }: Props) => {
 
   return (
-    <div className="todo chooseTodo" key={todo?.id}>
-      <div className="top">
+    <div className={`todo ${true && `chooseTodo`}`} key={todo?.id}>
+      {/*<div className="top">*/}
         <input type="checkbox" className="checkBox"/>
-        <span>{todo?.text}</span>
-      </div>
+        <div className='todoTextBlock'>
+          <h2 className='text'>hjkhi{todo?.title}</h2>
+          <h3 className='text'>hjkhi{todo?.text}</h3>
+        </div>
+      {/*</div>*/}
       <button className="button">Deleted</button>
     </div>
   )
