@@ -1,7 +1,9 @@
 export type TodoItem = {
-  id: number
+  id: string
   title: string
   text: string
   isSelected: boolean
-  dateCompletion: Date
+  completionDate: number
+  creationDate: number
+  file: string[]
 }

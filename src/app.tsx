@@ -1,27 +1,28 @@
-import React, { useRef } from 'react'
+import React  from 'react'
 import './app.less'
+import { Form } from './components/form/form'
+import { useQuery } from '@tanstack/react-query'
+import { getTodos, TODOS } from './api/todos'
+import { EMPTY_LIST } from './api/api'
 import { Todo } from './components/todo/todo'
+import { TodoItem } from './types/todoItem'
 
 export const App = () => {
-  const inputRef = useRef<HTMLInputElement>(null)
-
-  const handleKeyDown = (event: any) => {
-    if (event.key === 'Enter') {
-      if (inputRef.current!.value !== '') {
-        console.log(1)
-      }
-      inputRef.current!.value = ''
-    }
-  }
+  const { data: todos = EMPTY_LIST } = useQuery([TODOS], getTodos, {
+    retry: false,
+    placeholderData: EMPTY_LIST
+  })
 
   return (
     <div className="app">
-      <div className="form">
-        <input className="input" type="text" ref={inputRef} onKeyDown={handleKeyDown}/>
-        <button className="addButton">Добавить</button>
+      <Form/>
+      <div className="todoBlock">
+        {
+          todos
+          .sort((a: TodoItem, b: TodoItem) => a.creationDate - b.creationDate)
+          .map(todo => <Todo todo={todo} key={todo.id}/>)
+        }
       </div>
-      {/*{todos.map(todo => <Todo todo={todo} key={todo.id}/>)}*/}
-      <Todo/>
     </div>
   )
 }

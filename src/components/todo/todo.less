@@ -9,6 +9,7 @@
   width: 100%;
   max-width: 800px;
   min-height: 60px;
+  transition: .33s ease;
 }
 
 .chooseTodo {
@@ -32,18 +33,13 @@ input[type="checkbox"]::before {
   width: 15px;
   height: 15px;
   transform: scale(0);
-  transition: 120ms transform ease-in-out;
+  transition: .33s transform ease-in-out;
   background-color: #1B264F;
 }
 
 input[type="checkbox"]:checked::before {
   transform: scale(1);
-}
-
-input[type="checkbox"]:disabled {
-  --form-control-color: var(--form-control-disabled);
-  color: var(--form-control-disabled);
-  cursor: not-allowed;
+  transition: .33s ease;
 }
 
 .todoTextBlock{
