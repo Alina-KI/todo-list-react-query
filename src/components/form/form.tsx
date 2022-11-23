@@ -8,7 +8,7 @@ export const Form = () => {
   return (
     <div className="form">
       <div className="blockText">
-        <h1 className="title">Заголовок</h1>
+        <h2 className="title">Заголовок</h2>
         <input className="input" type="text" ref={inputRef}/>
       </div>
       <div className="blockText">
