@@ -3,7 +3,12 @@ export type TodoItem = {
   title: string
   text: string
   isSelected: boolean
-  completionDate: number
+  completionDate: string
   creationDate: number
-  file: string[]
+  files: FileItem[]
+}
+
+export type FileItem = {
+  name: string
+  path: string
 }

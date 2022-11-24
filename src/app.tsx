@@ -1,25 +1,20 @@
 import React  from 'react'
 import './app.less'
 import { Form } from './components/form/form'
-import { useQuery } from '@tanstack/react-query'
-import { getTodos, TODOS } from './api/todos'
-import { EMPTY_LIST } from './api/api'
 import { Todo } from './components/todo/todo'
 import { TodoItem } from './types/todoItem'
+import { useGetTodos } from './hooks/useGetTodos'
 
 export const App = () => {
-  const { data: todos = EMPTY_LIST } = useQuery([TODOS], getTodos, {
-    retry: false,
-    placeholderData: EMPTY_LIST
-  })
+  const todos = useGetTodos()
 
   return (
     <div className="app">
-      <Form/>
+      <Form buttonText='Добавить'/>
       <div className="todoBlock">
         {
           todos
-          .sort((a: TodoItem, b: TodoItem) => a.creationDate - b.creationDate)
+          .sort((a: TodoItem, b: TodoItem) => b.creationDate - a.creationDate)
           .map(todo => <Todo todo={todo} key={todo.id}/>)
         }
       </div>

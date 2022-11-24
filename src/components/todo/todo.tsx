@@ -1,50 +1,37 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './todo.less'
 import { TodoItem } from '../../types/todoItem'
-import { useMutation } from '@tanstack/react-query'
-import { deleteTodos, TODOS, updateTodo } from '../../api/todos'
-import { queryClient } from '../../index'
-import { EMPTY_LIST } from '../../api/api'
+import { useUpdateTodo } from '../../hooks/useUpdateTodo'
+import { useDeleteTodo } from '../../hooks/useDeleteTodo'
+import { EditTodoModal } from '../editTodoModal/editTodoModal'
+import dayjs from 'dayjs'
+import { FilesTodoModal } from '../filesTodoModal/filesTodoModal'
 
 type Props = {
   todo: TodoItem
 }
 
 export const Todo = ({ todo }: Props) => {
-  const { mutate: updateTodoMutation } = useMutation(updateTodo, {
-    onSuccess: (updatedTodo, { id }) => {
-      queryClient.setQueryData(
-        [TODOS],
-        (prev: TodoItem[] = EMPTY_LIST) => prev.map(item => {
-          if (item.id === id)
-            return { ...item, isSelected: !item.isSelected }
-          return item
-        })
-      )
-    }
-  })
-
-  const { mutate: deleteTodoMutation } = useMutation(deleteTodos, {
-    onSuccess: (deletedTodo, id) => {
-      queryClient.setQueryData(
-        [TODOS],
-        (prev: TodoItem[] = EMPTY_LIST) => prev.filter(item => item.id !== id)
-      )
-    }
-  })
+  const [isOpenModal, setIsOpenModal] = useState(false)
+  const [isOpenFilesModal, setIsOpeFilesModal] = useState(false)
+  const updateTodo = useUpdateTodo()
+  const deleteTodo = useDeleteTodo()
+  const isSelected = todo.isSelected || dayjs(todo.completionDate) <= dayjs()
 
   return (
-    <div className={`todo ${todo.isSelected && `chooseTodo`}`} key={todo?.id}>
+    <div className={`todo ${isSelected && `chooseTodo`}`} key={todo?.id}>
       <input
-        type="checkbox" defaultChecked={todo.isSelected || todo.completionDate === Date.now()}
-        onClick={() => updateTodoMutation({ ...todo, isSelected: !todo.isSelected })}/>
-      <div className="todoTextBlock">
-        <h2 className="text">{todo.title}</h2>
-        <h3 className="text">{todo.text}</h3>
+        type="checkbox" checked={isSelected}
+        onChange={() => updateTodo({ ...todo, isSelected: !todo.isSelected })}/>
+      <div className="todoTextBlock" onDoubleClick={() => setIsOpenModal(true)}>
+        <h2 className="textTodo">{todo.title}</h2>
+        <h3 className="textTodo">{todo.text}</h3>
+        <span className='textTodo'>{dayjs(todo.completionDate).format('ddd, MMM D, YYYY h:mm A')}</span>
       </div>
-      <button className="button" onClick={() => deleteTodoMutation(todo.id)}>
-        Deleted
-      </button>
+      <button className="showFilesButtonTodo" onClick={() => setIsOpeFilesModal(true)}>Посмотреть Файлы</button>
+      <button className="deleteButtonTodo" onClick={() => deleteTodo(todo.id)}>Удалить</button>
+      <EditTodoModal todo={todo} isOpen={isOpenModal} setIsOpen={setIsOpenModal}/>
+      <FilesTodoModal todo={todo} isOpen={isOpenFilesModal} setIsOpen={setIsOpeFilesModal}/>
     </div>
   )
 }

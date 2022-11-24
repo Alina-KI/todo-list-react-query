@@ -10,17 +10,17 @@ export const getTodos = async () => {
   return docs.map(doc => ({ id: doc.id, ...doc.data() })) as TodoItem[]
 }
 
-export const deleteTodos = async (id: string) => await deleteDoc(doc(db, 'cities', id))
+export const deleteTodos = async (id: string) => await deleteDoc(doc(db, 'todos', id))
 
-export const addTodo = async ({ title, text, file }: AddTodoPayload) => await addDoc(collection(db, 'todos'), {
+export const addTodo = async ({ title, text, files, completionDate }: AddTodoPayload) => await addDoc(collection(db, 'todos'), {
   title,
   text,
-  completionDate: Date.now(),
+  completionDate,
   creationDate: Date.now(),
   isSelected: false,
-  file
+  files
 })
 
-export const updateTodo = async ({ id, ...todo }: TodoItem) => {
+export const updateTodo = async ({ id,  ...todo }: TodoItem) => {
   await updateDoc(doc(db, 'todos', id), { id, ...todo })
 }

@@ -1,73 +1,71 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import './form.less'
-import { useMutation } from '@tanstack/react-query'
-import { addTodo, TODOS } from '../../api/todos'
-import { queryClient, storage } from '../../index'
-import { EMPTY_LIST } from '../../api/api'
-import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage'
+import { useAddTodo } from '../../hooks/useAddTodo'
+import { useAddFiles } from '../../hooks/useAddFiles'
+import { TodoItem } from '../../types/todoItem'
+import { useUpdateTodo } from '../../hooks/useUpdateTodo'
+import dayjs from 'dayjs'
 
-export const Form = () => {
+type Props = {
+  buttonText: string
+  todo?: TodoItem
+  closeModal?: () => void
+}
+
+export const Form = ({ todo, buttonText, closeModal }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null)
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
-  const [file, setFile] = useState<File | null>()
-  const [filesUrl, setFilesUrl] = useState<string[]>([])
-  const [progressPercent, setProgressPercent] = useState(0)
-
-  const { mutate: addTodoMutation } = useMutation(addTodo, {
-    onSuccess: (addedTodo) => {
-      queryClient.setQueryData(
-        [TODOS],
-        (prev: any = EMPTY_LIST) => [addedTodo, ...prev]
-      )
-    }
-  })
-
-  const addedFiles = () => {
-    if (!file) return
-    const storageRef = ref(storage, `files/${file.name}`)
-    const uploadTask = uploadBytesResumable(storageRef, file)
-
-    uploadTask.on('state_changed',
-      (snapshot) => {
-        const progress =
-          Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100)
-        setProgressPercent(progress)
-      },
-      (error: Error) => console.log(error.message),
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-         setFilesUrl([...filesUrl, downloadURL])
-        })
-      }
-    )
-  }
+  const dateInputRef = useRef<HTMLInputElement>(null)
+  const addTodo = useAddTodo()
+  const updateTodo = useUpdateTodo(closeModal)
+  const { filesUrl, setFiles, addedFiles } = useAddFiles()
+  const isUpdate = !!todo
 
   return (
     <div className="form">
-      <div className="leftBlockForm">
-        <div className="blockText">
-          <h2 className="title">Заголовок</h2>
-          <input className="input" type="text" ref={inputRef}/>
+      <div className="blockForm">
+        <div className="leftBlockForm">
+          <div className="blockTextForm">
+            <h2 className="titleForm">Заголовок</h2>
+            <input className="inputForm" type="text" ref={inputRef} placeholder={todo?.title}/>
+          </div>
+          <div className="blockTextForm">
+            <h2 className="titleForm">Описание</h2>
+            <textarea className="inputForm" ref={textAreaRef} placeholder={todo?.text}/>
+          </div>
         </div>
-        <div className="blockText">
-          <h2 className="title">Описание</h2>
-          <textarea className="input" ref={textAreaRef}/>
-        </div>
-        <button className="addButton" onClick={() =>  addTodoMutation({
-            title: inputRef.current!.value,
-            text: textAreaRef.current!.value,
-            file: filesUrl
-          }
-        )}>
-          Добавить
-        </button>
-      </div>
-      <div className="rightBlockForm">
-        <div className='filesBlockForm'>
-          <input type="file" onChange={(event) => setFile(event.target.files![0])}/>
-          <button onClick={() => addedFiles()}>Добавить файл</button>
+        <div className="rightBlockForm">
+          <input className="dateInputForm" type="datetime-local" ref={dateInputRef}
+                 placeholder={dayjs(todo?.completionDate).format('ddd, MMM D, YYYY h:mm A')}/>
+          <div className="filesBlockForm">
+            <input className="fileInputForm" type="file" min="2022-11-07T00:00"
+                   onChange={(event) => setFiles(event.target.files![0])}/>
+            <button className="addFileButtonForm" onClick={() => addedFiles()}>Добавить файл</button>
+          </div>
         </div>
       </div>
+      <button className="addButtonForm" onClick={() => {
+        isUpdate
+          ? updateTodo({
+            ...todo,
+            title: inputRef.current!.value === '' ? todo.title : inputRef.current!.value,
+            text: textAreaRef.current!.value === '' ? todo.text : textAreaRef.current!.value,
+            completionDate: dateInputRef.current!.value === '' ? todo.completionDate : dateInputRef.current!.value,
+            files: [...todo.files, ...filesUrl]
+          })
+          : addTodo({
+              title: inputRef.current!.value,
+              text: textAreaRef.current!.value,
+              completionDate: dateInputRef.current!.value === '' ? Date.now().toString() : dateInputRef.current!.value,
+              files: filesUrl
+            }
+          )
+        inputRef.current!.value = ''
+        textAreaRef.current!.value = ''
+        dateInputRef.current!.value = ''
+      }}>
+        {buttonText}
+      </button>
     </div>
   )
 }
