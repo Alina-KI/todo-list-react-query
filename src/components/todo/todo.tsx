@@ -11,6 +11,11 @@ type Props = {
   todo: TodoItem
 }
 
+/** Отображение Задачи
+ * @constructor
+ * @param {TodoItem} todo - Текущая задача для отображения
+ * @return {jsx} разметка страницы
+ * */
 export const Todo = ({ todo }: Props) => {
   const [isOpenModal, setIsOpenModal] = useState(false)
   const [isOpenFilesModal, setIsOpeFilesModal] = useState(false)

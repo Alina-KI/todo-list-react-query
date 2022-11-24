@@ -7,10 +7,11 @@ type Props = {
   file: FileItem
   todo: TodoItem
 }
-
+/** Хук на удаление файлов */
 export const useDeleteFile = () => {
   const updateTodo = useUpdateTodo()
 
+  /** Функция, которая удаляет в storage файлы и удаляет файлы у задачи */
   const deleteFile = async ({file, todo}: Props) => {
     const storageRef = ref(storage, `files/${file.name}`)
     console.log(storageRef)

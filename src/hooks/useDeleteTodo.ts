@@ -4,6 +4,7 @@ import { queryClient } from '../index'
 import { TodoItem } from '../types/todoItem'
 import { EMPTY_LIST } from '../api/api'
 
+/** Хук, который удаляет задачу */
 export const useDeleteTodo = () => {
   const { mutate: deleteTodoMutation } = useMutation(deleteTodos, {
     onSuccess: (deletedTodo, id) => {

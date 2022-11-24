@@ -10,6 +10,13 @@ type Props = {
   setIsOpen: (isOpen: boolean) => void
 }
 
+/** Модальное окно для изменения данных
+ * @constructor
+ * @param {TodoItem} todo - Текущая задача для изменения
+ * @param {boolean} isOpen - Условие на открытие модального окна
+ * @param {(isOpen: boolean) => void} setIsOpen - Изменение условия открытия модального окна
+ * @return {jsx} разметка страницы
+ * */
 export const EditTodoModal = ({ todo, isOpen, setIsOpen }: Props) => {
   useInternalClick('formEditTodoModal', {
       onExternalClick: () => setIsOpen(false)

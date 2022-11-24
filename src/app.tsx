@@ -5,6 +5,10 @@ import { Todo } from './components/todo/todo'
 import { TodoItem } from './types/todoItem'
 import { useGetTodos } from './hooks/useGetTodos'
 
+/** Основная страница
+ *  @constructor
+ *  @return {jsx} разметка страницы
+ * */
 export const App = () => {
   const todos = useGetTodos()
 

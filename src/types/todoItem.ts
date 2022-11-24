@@ -1,3 +1,4 @@
+/** Тип Todo (Задачи) */
 export type TodoItem = {
   id: string
   title: string
@@ -8,6 +9,7 @@ export type TodoItem = {
   files: FileItem[]
 }
 
+/** Тип файла */
 export type FileItem = {
   name: string
   path: string

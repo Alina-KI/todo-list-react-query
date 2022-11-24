@@ -11,7 +11,13 @@ type Props = {
   todo?: TodoItem
   closeModal?: () => void
 }
-
+/** МФорма для создания и изменения задачи
+ * @constructor
+ * @param {TodoItem} todo - Текущая задача для изменения
+ * @param {string} buttonText - Текст для кнопки (Добавить задачу или Изменить задачу)
+ * @param {() => void} closeModal - Функция для закрытия модального окна
+ * @return {jsx} разметка страницы
+ * */
 export const Form = ({ todo, buttonText, closeModal }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null)
   const textAreaRef = useRef<HTMLTextAreaElement>(null)

@@ -4,6 +4,10 @@ import { queryClient } from '../index'
 import { TodoItem } from '../types/todoItem'
 import { EMPTY_LIST } from '../api/api'
 
+/** Хук, который изменяет данные в задачи
+ * @constructor
+ * @param {() => {}} closeModal - Функция, которая закрывает модальное окно
+ * */
 export const useUpdateTodo = (closeModal?: () => void) => {
   const { mutate: updateTodoMutation } = useMutation(updateTodo, {
     onSuccess: (updatedTodo, { id, ...todo }) => {
